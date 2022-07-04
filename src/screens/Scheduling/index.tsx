@@ -15,18 +15,22 @@ interface IProps {
 }
 
 export function Scheduling({ onReady, ...rest }: IProps) {
-  const { navigate } = useNavigation();
   const theme = useTheme();
+  const { navigate, goBack } = useNavigation();
 
   function handleConfirmInfo() {
     navigate('SchedulingDetails');
+  }
+
+  function handleGoBack() {
+    goBack();
   }
   return (
     <Container onLayout={onReady} {...rest}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
       <Header>
-        <BackButton onPress={() => {}} color={theme.colors.shape} />
+        <BackButton onPress={handleGoBack} color={theme.colors.shape} />
 
         <Title>
           Escolha uma {'\n'}

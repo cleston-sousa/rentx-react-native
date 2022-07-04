@@ -49,18 +49,21 @@ const imgTest = 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png';
 
 export function SchedulingDetails({ onReady }: IProps) {
   const theme = useTheme();
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
 
   function handleConfirmRental() {
     navigate('SchedulingComplete');
   }
 
+  function handleGoBack() {
+    goBack();
+  }
   return (
     <Container onLayout={onReady}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleGoBack} />
       </Header>
 
       <CarImages>
