@@ -1,4 +1,9 @@
+import 'react-native-gesture-handler';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
+
 import React, { useCallback, useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -8,10 +13,8 @@ import { Archivo_400Regular, Archivo_500Medium, Archivo_600SemiBold } from '@exp
 
 import { ThemeProvider } from 'styled-components';
 
-import { Home } from './src/screens/Home';
-
 import theme from './src/styles/theme';
-import { CarDetails } from './src/screens/CarDetails';
+import { Routes } from './src/routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -44,9 +47,11 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CarDetails onReady={onLayoutRootView} />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider theme={theme}>
+        <Routes onReady={onLayoutRootView} />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 

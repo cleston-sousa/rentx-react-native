@@ -1,7 +1,13 @@
-import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { ReactNode } from 'react';
 
-export const Container = styled.View`
+export interface IButtonProps extends RectButtonProps {
+  children: ReactNode;
+}
+
+export const Container = styled(RectButton)<IButtonProps>`
   width: 100%;
   height: 126px;
   background-color: ${({ theme }) => theme.colors.background_secondary};
@@ -56,6 +62,3 @@ export const CarImage = styled.Image`
   width: 167px;
   height: 85px;
 `;
-
-//${({theme})=>theme.colors.background}
-//${({theme})=>theme.fonts.regular}

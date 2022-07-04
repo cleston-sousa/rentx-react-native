@@ -1,19 +1,26 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { useTheme } from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
 import { IProps } from '../../../App';
+
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
+import { Button } from '../../components/Button';
 
 import {
-  About,
   Accessories,
   Brand,
+  CalendarIcon,
   CarImages,
   Container,
   Content,
+  DateInfo,
+  DateTitle,
+  DateValue,
   Description,
   Details,
   Footer,
@@ -21,7 +28,13 @@ import {
   Name,
   Period,
   Price,
-  Rent
+  Rent,
+  RentalPeriod,
+  RentalPrice,
+  RentalPriceDetails,
+  RentalPriceLabel,
+  RentalPriceQuota,
+  RentalPriceTotal
 } from './styles';
 
 import SpeedSvg from '../../assets/speed.svg';
@@ -30,15 +43,16 @@ import ForceSvg from '../../assets/force.svg';
 import GasolineSvg from '../../assets/gasoline.svg';
 import ExchangeSvg from '../../assets/exchange.svg';
 import PeopleSvg from '../../assets/people.svg';
-import { Button } from '../../components/Button';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const imgTest = 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png';
 
-export function CarDetails({ onReady }: IProps) {
+export function SchedulingDetails({ onReady }: IProps) {
+  const theme = useTheme();
   const { navigate } = useNavigation();
 
-  function handleChooseDate() {
-    navigate('Scheduling');
+  function handleConfirmRental() {
+    navigate('SchedulingComplete');
   }
 
   return (
@@ -74,14 +88,35 @@ export function CarDetails({ onReady }: IProps) {
           <Accessory name="2 People" icon={PeopleSvg} />
         </Accessories>
 
-        <About>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, in vero? Atque odio recusandae expedita
-          corrupti eum magnam, reiciendis vel aliquid. Laboriosam inventore obcaecati sint quaerat, laudantium corporis
-          cupiditate illo?
-        </About>
+        <RentalPeriod>
+          <CalendarIcon>
+            <Feather name="calendar" size={RFValue(24)} color={theme.colors.shape} />
+          </CalendarIcon>
+
+          <DateInfo>
+            <DateTitle>De</DateTitle>
+            <DateValue>18/06/2022</DateValue>
+          </DateInfo>
+
+          <Feather name="chevron-right" size={RFValue(10)} color={theme.colors.shape} />
+
+          <DateInfo>
+            <DateTitle>Até</DateTitle>
+            <DateValue>18/06/2022</DateValue>
+          </DateInfo>
+        </RentalPeriod>
+
+        <RentalPrice>
+          <RentalPriceLabel>Total</RentalPriceLabel>
+
+          <RentalPriceDetails>
+            <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
+            <RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+          </RentalPriceDetails>
+        </RentalPrice>
       </Content>
       <Footer>
-        <Button title="Escolher período do aluguel" onPress={handleChooseDate} />
+        <Button title="Alugar agora" onPress={handleConfirmRental} color={theme.colors.success} />
       </Footer>
     </Container>
   );

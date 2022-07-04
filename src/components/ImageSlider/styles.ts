@@ -5,9 +5,7 @@ interface IImageIndexProps {
   active: boolean;
 }
 
-export const Container = styled.View`
-  flex: 1;
-`;
+export const Container = styled.View``;
 
 export const ImageIndexes = styled.View`
   flex-direction: row;

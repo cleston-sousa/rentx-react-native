@@ -1,7 +1,9 @@
 import React from 'react';
+import { Text } from 'react-native';
+import { RectButtonProps, TouchableOpacity } from 'react-native-gesture-handler';
 
 import GasolineSvg from '../../assets/gasoline.svg';
-import { numberToCurrency } from '../../utils/i18n';
+import { numberToCurrencyFormatted } from '../../utils/i18n';
 
 import { Container, Details, Brand, Name, Rent, Period, Price, About, Type, CarImage } from './styles';
 
@@ -15,20 +17,20 @@ interface ICarData {
   thumbnail: string;
 }
 
-interface IProps {
+interface IProps extends RectButtonProps {
   data: ICarData;
 }
 
-export function Car({ data }: IProps) {
+export function Car({ data, ...rest }: IProps) {
   return (
-    <Container>
+    <Container {...rest}>
       <Details>
         <Brand>{data.brand}</Brand>
         <Name>{data.name}</Name>
         <About>
           <Rent>
             <Period>{data.rent.period}</Period>
-            <Price>{numberToCurrency(data.rent.price)}</Price>
+            <Price>{numberToCurrencyFormatted(data.rent.price)}</Price>
           </Rent>
           <Type>
             <GasolineSvg />
