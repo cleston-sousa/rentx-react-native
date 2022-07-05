@@ -1,27 +1,19 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { RectButtonProps, TouchableOpacity } from 'react-native-gesture-handler';
+import { RectButtonProps } from 'react-native-gesture-handler';
 
-import GasolineSvg from '../../assets/gasoline.svg';
+import { ICar } from '../../dtos/ICar';
+
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 import { numberToCurrencyFormatted } from '../../utils/i18n';
 
 import { Container, Details, Brand, Name, Rent, Period, Price, About, Type, CarImage } from './styles';
 
-interface ICarData {
-  brand: string;
-  name: string;
-  rent: {
-    period: string;
-    price: number;
-  };
-  thumbnail: string;
-}
-
 interface IProps extends RectButtonProps {
-  data: ICarData;
+  data: ICar;
 }
 
 export function Car({ data, ...rest }: IProps) {
+  const MotorIconSvg = getAccessoryIcon(data.fuel_type);
   return (
     <Container {...rest}>
       <Details>
@@ -33,7 +25,7 @@ export function Car({ data, ...rest }: IProps) {
             <Price>{numberToCurrencyFormatted(data.rent.price)}</Price>
           </Rent>
           <Type>
-            <GasolineSvg />
+            <MotorIconSvg />
           </Type>
         </About>
       </Details>

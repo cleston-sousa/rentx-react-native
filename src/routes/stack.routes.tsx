@@ -6,10 +6,11 @@ import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
+import { ICar } from '../dtos/ICar';
 
 export type StackRoutesParamList = {
   Home: undefined;
-  CarDetails: undefined;
+  CarDetails: { car: ICar };
   Scheduling: undefined;
   SchedulingDetails: undefined;
   SchedulingComplete: undefined;

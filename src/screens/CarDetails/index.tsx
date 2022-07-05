@@ -1,11 +1,14 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { IProps } from '../../../App';
+import { StackRoutesParamList } from '../../routes/stack.routes';
+
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
+import { Button } from '../../components/Button';
 
 import {
   About,
@@ -24,18 +27,14 @@ import {
   Rent
 } from './styles';
 
-import SpeedSvg from '../../assets/speed.svg';
-import AccelerationSvg from '../../assets/acceleration.svg';
-import ForceSvg from '../../assets/force.svg';
-import GasolineSvg from '../../assets/gasoline.svg';
-import ExchangeSvg from '../../assets/exchange.svg';
-import PeopleSvg from '../../assets/people.svg';
-import { Button } from '../../components/Button';
+import { numberToCurrencyFormatted } from '../../utils/i18n';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
-const imgTest = 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png';
+export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'CarDetails'>;
 
-export function CarDetails({ onReady }: IProps) {
+export function CarDetails({ route }: ScreenProps) {
   const { navigate, goBack } = useNavigation();
+  const { car } = route.params;
 
   function handleChooseDate() {
     navigate('Scheduling');
@@ -45,7 +44,7 @@ export function CarDetails({ onReady }: IProps) {
     goBack();
   }
   return (
-    <Container onLayout={onReady}>
+    <Container>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
       <Header>
@@ -53,35 +52,28 @@ export function CarDetails({ onReady }: IProps) {
       </Header>
 
       <CarImages>
-        <ImageSlider imageUrl={[imgTest, imgTest, imgTest, imgTest]} />
+        <ImageSlider imageUrl={car.photos} />
       </CarImages>
 
       <Content>
         <Details>
           <Description>
-            <Brand>Lamborghini</Brand>
-            <Name>Huracan</Name>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
           </Description>
           <Rent>
-            <Period>Ao dia</Period>
-            <Price>R$ 580</Price>
+            <Period>{car.rent.period}</Period>
+            <Price>{numberToCurrencyFormatted(car.rent.price)}</Price>
           </Rent>
         </Details>
 
         <Accessories>
-          <Accessory name="380 km/h" icon={SpeedSvg} />
-          <Accessory name="3.2 s" icon={AccelerationSvg} />
-          <Accessory name="800 HP" icon={ForceSvg} />
-          <Accessory name="Gasoline" icon={GasolineSvg} />
-          <Accessory name="Auto" icon={ExchangeSvg} />
-          <Accessory name="2 People" icon={PeopleSvg} />
+          {car.accessories.map((accessory) => (
+            <Accessory key={accessory.type} name={accessory.name} icon={getAccessoryIcon(accessory.type)} />
+          ))}
         </Accessories>
 
-        <About>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, in vero? Atque odio recusandae expedita
-          corrupti eum magnam, reiciendis vel aliquid. Laboriosam inventore obcaecati sint quaerat, laudantium corporis
-          cupiditate illo?
-        </About>
+        <About>{car.about}</About>
       </Content>
       <Footer>
         <Button title="Escolher período do aluguel" onPress={handleChooseDate} />
