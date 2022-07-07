@@ -18,6 +18,7 @@ import ArrowSvg from '../../assets/arrow.svg';
 import { getIntervalFormatted } from '../../utils/getIntervalFormatted';
 import { dateFormatted } from '../../utils/i18n';
 import { api } from '../../services/api';
+import axios from 'axios';
 
 export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'Scheduling'>;
 
@@ -34,9 +35,15 @@ export function Scheduling({ route }: ScreenProps) {
   const { navigate, goBack } = useNavigation();
 
   async function fetchUnavailableDates() {
-    const response = await api.get(`/schedules_bycars/${car.id}`);
-    const unavailableDatesResponse: string[] = response.data['unavailable_dates'];
-
+    let unavailableDatesResponse: string[] = [];
+    try {
+      const response = await api.get(`/schedules_bycars/${car.id}`);
+      unavailableDatesResponse = response.data['unavailable_dates'];
+    } catch (error) {
+      if (!(axios.isAxiosError(error) && error.response && error.response.status == 404)) {
+        Alert.alert('Veículo sujeito a análise de disponibilidade.');
+      }
+    }
     let interval: IMarkedDatesType = {};
     unavailableDatesResponse.forEach((item) => {
       interval = {
@@ -47,7 +54,6 @@ export function Scheduling({ route }: ScreenProps) {
       };
     });
     setMarkedDates(interval);
-
     setUnavailableDates(unavailableDatesResponse);
   }
 

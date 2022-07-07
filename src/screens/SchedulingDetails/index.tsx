@@ -42,6 +42,7 @@ import {
 import { numberToCurrencyFormatted } from '../../utils/i18n';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 import { api } from '../../services/api';
+import axios from 'axios';
 
 export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'SchedulingDetails'>;
 
@@ -52,17 +53,38 @@ export function SchedulingDetails({ route }: ScreenProps) {
   const { navigate, goBack } = useNavigation();
 
   async function handleConfirmRental() {
-    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+    let unavailableDatesResponse: string[] = [];
+    let notFound = false;
+    try {
+      const response = await api.get(`/schedules_bycars/${car.id}`);
+      unavailableDatesResponse = response.data['unavailable_dates'];
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response && error.response.status == 404) {
+        notFound = true;
+      } else {
+        Alert.alert('Veículo sujeito a análise de disponibilidade.');
+      }
+    }
 
-    const unavailableDates = [...schedulesByCar.data['unavailable_dates'], ...period.interval];
+    const unavailableDates = [...unavailableDatesResponse, ...period.interval];
 
-    api
-      .put(`/schedules_bycars/${car.id}`, {
-        id: car.id,
-        unavailable_dates: unavailableDates
-      })
-      .then(() => navigate('SchedulingComplete'))
-      .catch(() => Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.'));
+    if (notFound) {
+      api
+        .post(`/schedules_bycars`, {
+          id: car.id,
+          unavailable_dates: unavailableDates
+        })
+        .then(() => navigate('SchedulingComplete'))
+        .catch(() => Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.'));
+    } else {
+      api
+        .put(`/schedules_bycars/${car.id}`, {
+          id: car.id,
+          unavailable_dates: unavailableDates
+        })
+        .then(() => navigate('SchedulingComplete'))
+        .catch(() => Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.'));
+    }
   }
 
   function handleGoBack() {
