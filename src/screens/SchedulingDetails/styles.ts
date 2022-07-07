@@ -14,7 +14,7 @@ export const Header = styled.View`
 
   position: absolute;
   margin-top: ${getStatusBarHeight() + 18}px;
-  margin-left: 24px;
+  margin-left: ${RFValue(24)}px;
 `;
 
 export const CarImages = styled.View`
@@ -23,7 +23,7 @@ export const CarImages = styled.View`
 
 export const Content = styled.ScrollView.attrs({
   contentContainerStyle: {
-    padding: 14,
+    padding: RFValue(14),
     alignItems: 'center'
   },
   showsVerticalScrollIndicator: false
@@ -73,7 +73,7 @@ export const Accessories = styled.View`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: ${RFValue(16)}px;
 `;
 
 export const RentalPeriod = styled.View`
@@ -81,16 +81,16 @@ export const RentalPeriod = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 40px;
+  margin-top: ${RFValue(40)}px;
 
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.colors.line};
-  padding-bottom: 16px;
+  padding-bottom: ${RFValue(16)}px;
 `;
 
 export const CalendarIcon = styled.View`
-  width: 48px;
-  height: 48px;
+  width: ${RFValue(28)}px;
+  height: ${RFValue(28)}px;
   background-color: ${({ theme }) => theme.colors.main};
   align-items: center;
   justify-content: center;
@@ -113,7 +113,7 @@ export const DateValue = styled.Text`
 
 export const RentalPrice = styled.View`
   width: 100%;
-  margin-top: 16px;
+  margin-top: ${RFValue(16)}px;
 `;
 
 export const RentalPriceLabel = styled.Text`
@@ -146,5 +146,5 @@ export const Footer = styled.View`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background_secondary};
 
-  padding: 24px 24px ${getBottomSpace() + 24}px;
+  padding: ${RFValue(24)}px ${RFValue(24)}px ${getBottomSpace() + 24}px;
 `;

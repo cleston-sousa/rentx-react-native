@@ -14,7 +14,7 @@ export interface IButtonText {
 
 export const Container = styled(RectButton)<IButtonProps>`
   width: 100%;
-  padding: 19px;
+  padding: ${RFValue(19)}px;
   align-items: center;
   justify-content: center;
   background-color: ${({ theme, color }) => (color ? color : theme.colors.main)};

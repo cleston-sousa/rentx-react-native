@@ -37,7 +37,7 @@ export function CarDetails({ route }: ScreenProps) {
   const { car } = route.params;
 
   function handleChooseDate() {
-    navigate('Scheduling');
+    navigate('Scheduling', { car });
   }
 
   function handleGoBack() {

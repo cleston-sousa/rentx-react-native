@@ -14,7 +14,7 @@ export const Header = styled.View`
   height: ${RFValue(105)}px;
   background-color: ${({ theme }) => theme.colors.header};
   justify-content: flex-end;
-  padding: 32px 24px;
+  padding: ${RFValue(32)}px ${RFValue(24)}px;
 `;
 
 export const HeaderContent = styled.View`
@@ -31,7 +31,7 @@ export const TotalCars = styled.Text`
 
 export const CarList = styled(FlatList as new (props: FlatListProps<ICar>) => FlatList<ICar>).attrs({
   contentContainerStyle: {
-    padding: 24
+    padding: RFValue(24)
   },
   showsVerticalScrollIndicator: false
 })``;

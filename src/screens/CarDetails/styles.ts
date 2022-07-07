@@ -23,7 +23,7 @@ export const CarImages = styled.View`
 
 export const Content = styled.ScrollView.attrs({
   contentContainerStyle: {
-    padding: 14,
+    padding: RFValue(14),
     alignItems: 'center'
   },
   showsVerticalScrollIndicator: false
@@ -73,7 +73,7 @@ export const About = styled.Text`
   color: ${({ theme }) => theme.colors.text};
   font-size: ${RFValue(15)}px;
   text-align: justify;
-  margin-top: 23px;
+  margin-top: ${RFValue(23)}px;
   line-height: ${RFValue(25)}px;
 `;
 
@@ -83,12 +83,12 @@ export const Accessories = styled.View`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: ${RFValue(16)}px;
 `;
 
 export const Footer = styled.View`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background_secondary};
 
-  padding: 24px 24px ${getBottomSpace() + 24}px;
+  padding: ${RFValue(24)}px ${RFValue(24)}px ${getBottomSpace() + 24}px;
 `;

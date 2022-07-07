@@ -9,9 +9,11 @@ import DoneSvg from '../../assets/done.svg';
 
 import { IProps } from '../../../App';
 import { ConfirmButton } from '../../components/ConfirmButton';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 export function SchedulingComplete({ onReady }: IProps) {
   const { width } = useWindowDimensions();
+
   const { navigate } = useNavigation();
 
   function handleGoToHome() {
@@ -22,7 +24,7 @@ export function SchedulingComplete({ onReady }: IProps) {
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <LogoSvg width={width} />
       <Content>
-        <DoneSvg width={80} height={80} />
+        <DoneSvg width={RFValue(80)} height={RFValue(80)} />
         <Title>Carro alugado!</Title>
         <Message>
           Agora você só precisa ir {'\n'}

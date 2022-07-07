@@ -8,11 +8,24 @@ import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
 import { ICar } from '../dtos/ICar';
 
+export interface IRentalPeriod {
+  start: number;
+  startFormatted: string;
+  end: number;
+  endFormatted: string;
+  interval: string[];
+  days: number;
+  totalAmount: number;
+}
+
 export type StackRoutesParamList = {
   Home: undefined;
   CarDetails: { car: ICar };
-  Scheduling: undefined;
-  SchedulingDetails: undefined;
+  Scheduling: { car: ICar };
+  SchedulingDetails: {
+    car: ICar;
+    period: IRentalPeriod;
+  };
   SchedulingComplete: undefined;
 };
 
