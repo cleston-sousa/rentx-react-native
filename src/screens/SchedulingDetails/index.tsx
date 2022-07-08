@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, StatusBar } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components/native';
@@ -46,13 +46,21 @@ import axios from 'axios';
 
 export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'SchedulingDetails'>;
 
+const userId = 1;
+
 export function SchedulingDetails({ route }: ScreenProps) {
+  const [loading, setLoading] = useState(false);
   const { car, period } = route.params;
 
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
 
   async function handleConfirmRental() {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
     let unavailableDatesResponse: string[] = [];
     let notFound = false;
     try {
@@ -68,23 +76,29 @@ export function SchedulingDetails({ route }: ScreenProps) {
 
     const unavailableDates = [...unavailableDatesResponse, ...period.interval];
 
-    if (notFound) {
-      api
-        .post(`/schedules_bycars`, {
-          id: car.id,
-          unavailable_dates: unavailableDates
-        })
-        .then(() => navigate('SchedulingComplete'))
-        .catch(() => Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.'));
-    } else {
-      api
-        .put(`/schedules_bycars/${car.id}`, {
-          id: car.id,
-          unavailable_dates: unavailableDates
-        })
-        .then(() => navigate('SchedulingComplete'))
-        .catch(() => Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.'));
+    await api.post(`/schedules_byuser`, {
+      user_id: userId,
+      startDate: period.startFormatted,
+      endDate: period.endFormatted,
+      car
+    });
+
+    const reservedDates = {
+      id: car.id,
+      unavailable_dates: unavailableDates
+    };
+
+    try {
+      if (notFound) {
+        await api.post(`/schedules_bycars`, reservedDates);
+      } else {
+        await api.put(`/schedules_bycars/${car.id}`, reservedDates);
+      }
+      navigate('SchedulingComplete');
+    } catch (error) {
+      Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.');
     }
+    setLoading(false);
   }
 
   function handleGoBack() {

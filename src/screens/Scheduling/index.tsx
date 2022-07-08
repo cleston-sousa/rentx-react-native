@@ -19,6 +19,7 @@ import { getIntervalFormatted } from '../../utils/getIntervalFormatted';
 import { dateFormatted } from '../../utils/i18n';
 import { api } from '../../services/api';
 import axios from 'axios';
+import { Loading } from '../../components/Loading';
 
 export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'Scheduling'>;
 
@@ -31,10 +32,13 @@ export function Scheduling({ route }: ScreenProps) {
   const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
   const [unavailableSelected, setUnavailableSelected] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
 
   async function fetchUnavailableDates() {
+    setLoading(true);
     let unavailableDatesResponse: string[] = [];
     try {
       const response = await api.get(`/schedules_bycars/${car.id}`);
@@ -55,6 +59,7 @@ export function Scheduling({ route }: ScreenProps) {
     });
     setMarkedDates(interval);
     setUnavailableDates(unavailableDatesResponse);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -155,9 +160,12 @@ export function Scheduling({ route }: ScreenProps) {
         </RentalPeriod>
       </Header>
 
-      <Content>
-        <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
-      </Content>
+      {loading && <Loading />}
+      {!loading && (
+        <Content>
+          <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
+        </Content>
+      )}
 
       <Footer>
         <Button title="Confirmar" onPress={handleConfirmInfo} />
