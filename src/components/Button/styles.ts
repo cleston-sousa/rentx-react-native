@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 
 export interface IButtonProps extends RectButtonProps {
   color?: string;
+  loading?: boolean;
   children: ReactNode;
 }
 
@@ -18,7 +19,7 @@ export const Container = styled(RectButton)<IButtonProps>`
   align-items: center;
   justify-content: center;
   background-color: ${({ theme, color }) => (color ? color : theme.colors.main)};
-  opacity: ${({ enabled }) => (enabled ? 1 : 0.5)};
+  opacity: ${({ enabled, loading }) => (!enabled || loading ? 0.5 : 1)};
 `;
 
 export const Title = styled.Text<IButtonText>`

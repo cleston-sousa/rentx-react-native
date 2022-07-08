@@ -94,6 +94,7 @@ export function SchedulingDetails({ route }: ScreenProps) {
     } catch (error) {
       Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.');
     }
+    setButtonEnabled(true);
   }
 
   function handleGoBack() {
@@ -164,6 +165,7 @@ export function SchedulingDetails({ route }: ScreenProps) {
           onPress={handleConfirmRental}
           color={theme.colors.success}
           enabled={buttonEnabled}
+          loading={!buttonEnabled}
         />
       </Footer>
     </Container>
