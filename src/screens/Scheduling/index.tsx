@@ -168,7 +168,7 @@ export function Scheduling({ route }: ScreenProps) {
       )}
 
       <Footer>
-        <Button title="Confirmar" onPress={handleConfirmInfo} />
+        <Button title="Confirmar" onPress={handleConfirmInfo} enabled={!!rentalPeriod.startFormatted} />
       </Footer>
     </Container>
   );

@@ -49,18 +49,14 @@ export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'Scheduli
 const userId = 1;
 
 export function SchedulingDetails({ route }: ScreenProps) {
-  const [loading, setLoading] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(true);
   const { car, period } = route.params;
 
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
 
   async function handleConfirmRental() {
-    if (loading) {
-      return;
-    }
-
-    setLoading(true);
+    setButtonEnabled(false);
     let unavailableDatesResponse: string[] = [];
     let notFound = false;
     try {
@@ -98,7 +94,6 @@ export function SchedulingDetails({ route }: ScreenProps) {
     } catch (error) {
       Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.');
     }
-    setLoading(false);
   }
 
   function handleGoBack() {
@@ -164,7 +159,12 @@ export function SchedulingDetails({ route }: ScreenProps) {
         </RentalPrice>
       </Content>
       <Footer>
-        <Button title="Alugar agora" onPress={handleConfirmRental} color={theme.colors.success} />
+        <Button
+          title="Alugar agora"
+          onPress={handleConfirmRental}
+          color={theme.colors.success}
+          enabled={buttonEnabled}
+        />
       </Footer>
     </Container>
   );

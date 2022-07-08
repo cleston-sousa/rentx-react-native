@@ -7,11 +7,12 @@ interface IProps {
   color?: string;
   textColor?: string;
   onPress: () => void;
+  enabled?: boolean;
 }
 
-export function Button({ title, color, textColor, onPress, ...rest }: IProps) {
+export function Button({ title, color, textColor, onPress, enabled = true, ...rest }: IProps) {
   return (
-    <Container onPress={onPress} color={color} {...rest}>
+    <Container onPress={onPress} color={color} enabled={enabled} {...rest}>
       <Title color={textColor}>{title}</Title>
     </Container>
   );
