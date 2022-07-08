@@ -7,6 +7,7 @@ import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
 import { MyCars } from '../screens/MyCars';
+import { Splash } from '../screens/Splash';
 
 import { ICar } from '../dtos/ICar';
 
@@ -21,6 +22,7 @@ export interface IRentalPeriod {
 }
 
 export type StackRoutesParamList = {
+  Splash: undefined;
   Home: undefined;
   CarDetails: { car: ICar };
   Scheduling: { car: ICar };
@@ -37,10 +39,12 @@ const { Navigator, Screen } = createNativeStackNavigator<StackRoutesParamList>()
 export function StackRoutes() {
   return (
     <Navigator
+      initialRouteName="Splash"
       screenOptions={{
         headerShown: false
       }}
     >
+      <Screen name="Splash" component={Splash} />
       <Screen name="Home" component={Home} />
       <Screen name="CarDetails" component={CarDetails} />
       <Screen name="Scheduling" component={Scheduling} />
