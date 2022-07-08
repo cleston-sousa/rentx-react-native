@@ -53,7 +53,7 @@ export function SchedulingDetails({ route }: ScreenProps) {
   const { car, period } = route.params;
 
   const theme = useTheme();
-  const { navigate, goBack } = useNavigation();
+  const { goBack, reset } = useNavigation();
 
   async function handleConfirmRental() {
     setButtonEnabled(false);
@@ -90,7 +90,10 @@ export function SchedulingDetails({ route }: ScreenProps) {
       } else {
         await api.put(`/schedules_bycars/${car.id}`, reservedDates);
       }
-      navigate('SchedulingComplete');
+      reset({
+        index: 0,
+        routes: [{ name: 'SchedulingComplete' }]
+      });
     } catch (error) {
       Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.');
     }
