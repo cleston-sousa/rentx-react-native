@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet, BackHandler } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Ionicons } from '@expo/vector-icons';
@@ -46,6 +46,12 @@ export function Home() {
     fetchCars();
   }, []);
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return true;
+    });
+  }, []);
+
   function handleCarDetails(car: ICar) {
     navigate('CarDetails', { car });
   }
@@ -83,15 +89,17 @@ export function Home() {
       <Header>
         <HeaderContent>
           <Logo width={RFValue(105)} height={RFValue(12)} />
-          <TotalCars>{`Total de ${cars.length} carro${cars.length == 1 ? '' : 's'}`}</TotalCars>
+          {!loading && <TotalCars>{`Total de ${cars.length} carro${cars.length == 1 ? '' : 's'}`}</TotalCars>}
         </HeaderContent>
       </Header>
       {loading && <Loading />}
-      <CarList
-        data={cars}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Car data={item} onPress={() => handleCarDetails(item)} />}
-      />
+      {!loading && (
+        <CarList
+          data={cars}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Car data={item} onPress={() => handleCarDetails(item)} />}
+        />
+      )}
 
       <PanGestureHandler onGestureEvent={handleDragMyCars}>
         <Animated.View style={myCarsAnimatedStyle}>
