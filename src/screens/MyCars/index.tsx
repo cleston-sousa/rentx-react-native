@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components/native';
 import { AntDesign } from '@expo/vector-icons';
 
 import { BackButton } from '../../components/BackButton';
-import { Loading } from '../../components/Loading';
+import { LoadAnimation } from '../../components/LoadAnimation';
 
 import { ICar } from '../../dtos/ICar';
 
@@ -81,7 +81,7 @@ export function MyCars() {
         <Subtitle>Conforto, segurança e praticidade.</Subtitle>
       </Header>
 
-      {loading && <Loading />}
+      {loading && <LoadAnimation />}
       {!loading && (
         <Content>
           <Appointments>

@@ -12,7 +12,7 @@ import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
 
 import { api } from '../../services/api';
 import { ICar } from '../../dtos/ICar';
-import { Loading } from '../../components/Loading';
+import { LoadAnimation } from '../../components/LoadAnimation';
 
 import { RectButton, PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
@@ -92,7 +92,7 @@ export function Home() {
           {!loading && <TotalCars>{`Total de ${cars.length} carro${cars.length == 1 ? '' : 's'}`}</TotalCars>}
         </HeaderContent>
       </Header>
-      {loading && <Loading />}
+      {loading && <LoadAnimation />}
       {!loading && (
         <CarList
           data={cars}
