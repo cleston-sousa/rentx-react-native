@@ -3,6 +3,7 @@
     "name": "rentx",
     "slug": "rentx",
     "version": "1.0.0",
+    "jsEngine": "hermes",
     "assetBundlePatterns": ["**/*"],
     "splash": {
       "image": "./assets/splash.png",

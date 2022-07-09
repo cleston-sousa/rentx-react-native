@@ -25,7 +25,7 @@ export function Splash() {
       opacity: interpolate(splashAnimation.value, [0, 50], [1, 0]),
       transform: [
         {
-          translateX: interpolate(splashAnimation.value, [0, 25, 50], [0, -50, -100], Extrapolate.CLAMP)
+          translateX: interpolate(splashAnimation.value, [0, 25, 50], [0, 50, 100], Extrapolate.CLAMP)
         }
       ]
     };
