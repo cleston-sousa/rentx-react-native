@@ -53,7 +53,3 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-
-export interface IProps {
-  onReady?: () => void;
-}

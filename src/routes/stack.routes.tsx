@@ -5,7 +5,7 @@ import { Home } from '../screens/Home';
 import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
-import { SchedulingComplete } from '../screens/SchedulingComplete';
+import { Confirmation } from '../screens/Confirmation';
 import { MyCars } from '../screens/MyCars';
 import { Splash } from '../screens/Splash';
 import { SignIn } from '../screens/SignIn';
@@ -13,6 +13,12 @@ import { SignUpFirstStep } from '../screens/SignUpFirstStep';
 import { SignUpSecondStep } from '../screens/SignUpSecondStep';
 
 import { ICar } from '../dtos/ICar';
+
+export interface IConfirmation {
+  title: string;
+  message: string;
+  nextScreenRoute: keyof StackRoutesParamList;
+}
 
 export interface ISignUpSecondStep {
   name: string;
@@ -42,7 +48,7 @@ export type StackRoutesParamList = {
     car: ICar;
     period: IRentalPeriod;
   };
-  SchedulingComplete: undefined;
+  Confirmation: { data: IConfirmation };
   MyCars: undefined;
 };
 
@@ -70,7 +76,7 @@ export function StackRoutes() {
       <Screen name="CarDetails" component={CarDetails} />
       <Screen name="Scheduling" component={Scheduling} />
       <Screen name="SchedulingDetails" component={SchedulingDetails} />
-      <Screen name="SchedulingComplete" component={SchedulingComplete} />
+      <Screen name="Confirmation" component={Confirmation} />
       <Screen name="MyCars" component={MyCars} />
     </Navigator>
   );

@@ -8,6 +8,8 @@ import * as Yup from 'yup';
 
 import { StackRoutesParamList } from '../../routes/stack.routes';
 
+import { api } from '../../services/api';
+
 import { BackButton } from '../../components/BackButton';
 import { Bullet } from '../../components/Bullet';
 
@@ -17,6 +19,7 @@ import { PasswordInput } from '../../components/PasswordInput';
 
 export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'SignUpSecondStep'>;
 
+// schema para Yup validar a senha
 const schema = Yup.object().shape({
   password: Yup.string().required('Senha obrigatória'),
   confirmPassword: Yup.string()
@@ -25,9 +28,9 @@ const schema = Yup.object().shape({
 });
 
 export function SignUpSecondStep({ route }: ScreenProps) {
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   const theme = useTheme();
-  const { user } = route.params;
+  const { name, email, driverLicense } = route.params.user;
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
@@ -35,7 +38,7 @@ export function SignUpSecondStep({ route }: ScreenProps) {
     goBack();
   }
 
-  function handleRegister() {
+  async function handleRegister() {
     if (!password || !passwordConfirm) {
       return Alert.alert('Opa', 'Senha e confirmação de senha devem ser preenchidos');
     }
@@ -43,6 +46,21 @@ export function SignUpSecondStep({ route }: ScreenProps) {
     if (password != passwordConfirm) {
       return Alert.alert('Opa', 'Senha e confirmação devem ser iguais');
     }
+
+    await api
+      .post('/users', { name, email, password, driver_license: driverLicense })
+      .then(() => {
+        navigate('Confirmation', {
+          data: {
+            title: 'Conta criada!',
+            message: 'Agora é só fazer login\ne aproveitar.',
+            nextScreenRoute: 'SignIn'
+          }
+        });
+      })
+      .catch(() => {
+        Alert.alert('Opa', 'Erro no cadastro, tente mais tarde novamente');
+      });
   }
 
   return (

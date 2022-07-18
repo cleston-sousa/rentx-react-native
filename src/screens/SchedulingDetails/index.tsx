@@ -92,7 +92,18 @@ export function SchedulingDetails({ route }: ScreenProps) {
       }
       reset({
         index: 0,
-        routes: [{ name: 'SchedulingComplete' }]
+        routes: [
+          {
+            name: 'Confirmation',
+            params: {
+              data: {
+                title: 'Carro alugado!',
+                message: 'Agora você só precisa ir \naté a concessionária da RENTX \npegar o seu automóvel.',
+                nextScreenRoute: 'Home'
+              }
+            }
+          }
+        ]
       });
     } catch (error) {
       Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.');
