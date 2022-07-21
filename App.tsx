@@ -14,6 +14,7 @@ import { ThemeProvider } from 'styled-components';
 
 import theme from './src/styles/theme';
 import { Routes } from './src/routes';
+import { AppProvider } from './src/hooks';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -48,7 +49,9 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <Routes onReady={onLayoutRootView} />
+        <AppProvider>
+          <Routes onReady={onLayoutRootView} />
+        </AppProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

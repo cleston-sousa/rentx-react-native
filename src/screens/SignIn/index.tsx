@@ -10,6 +10,7 @@ import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
 
 import { Footer, Container, Header, SubTitle, Title, Form } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 interface IProps {
   onPress: () => void;
@@ -21,6 +22,8 @@ const schema = Yup.object().shape({
 });
 
 export function SignIn({ onPress }: IProps) {
+  const { signIn } = useAuth();
+
   const { navigate } = useNavigation();
   const theme = useTheme();
 
@@ -30,7 +33,8 @@ export function SignIn({ onPress }: IProps) {
   async function handleSignIn() {
     try {
       await schema.validate({ email, password });
-      Alert.alert('passou');
+
+      signIn({ email, password });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Nah', error.message);
