@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { StackRoutesParamList } from '../../routes/stack.routes';
+import { AppStackRoutesParamList } from '../../routes/app.stack.routes';
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
@@ -30,7 +30,7 @@ import {
 import { numberToCurrencyFormatted } from '../../utils/i18n';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
-export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'CarDetails'>;
+export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'CarDetails'>;
 
 export function CarDetails({ route }: ScreenProps) {
   const { navigate, goBack } = useNavigation();
@@ -62,8 +62,8 @@ export function CarDetails({ route }: ScreenProps) {
             <Name>{car.name}</Name>
           </Description>
           <Rent>
-            <Period>{car.rent.period}</Period>
-            <Price>{numberToCurrencyFormatted(car.rent.price)}</Price>
+            <Period>{car.period}</Period>
+            <Price>{numberToCurrencyFormatted(car.price)}</Price>
           </Rent>
         </Details>
 

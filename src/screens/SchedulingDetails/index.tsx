@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { StackRoutesParamList } from '../../routes/stack.routes';
+import { AppStackRoutesParamList } from '../../routes/app.stack.routes';
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
@@ -44,7 +44,7 @@ import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 import { api } from '../../services/api';
 import axios from 'axios';
 
-export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'SchedulingDetails'>;
+export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'SchedulingDetails'>;
 
 const userId = 1;
 
@@ -99,7 +99,7 @@ export function SchedulingDetails({ route }: ScreenProps) {
               data: {
                 title: 'Carro alugado!',
                 message: 'Agora você só precisa ir \naté a concessionária da RENTX \npegar o seu automóvel.',
-                nextScreenRoute: 'Home'
+                nextScreenRoute: 'HomeContainer'
               }
             }
           }
@@ -133,8 +133,8 @@ export function SchedulingDetails({ route }: ScreenProps) {
             <Name>{car.name}</Name>
           </Description>
           <Rent>
-            <Period>{car.rent.period}</Period>
-            <Price>{numberToCurrencyFormatted(car.rent.price)}</Price>
+            <Period>{car.period}</Period>
+            <Price>{numberToCurrencyFormatted(car.price)}</Price>
           </Rent>
         </Details>
 
@@ -166,7 +166,7 @@ export function SchedulingDetails({ route }: ScreenProps) {
           <RentalPriceLabel>Total</RentalPriceLabel>
 
           <RentalPriceDetails>
-            <RentalPriceQuota>{`R$ ${car.rent.price} x${period.days} diária${
+            <RentalPriceQuota>{`R$ ${car.price} x${period.days} diária${
               period.days == 1 ? '' : 's'
             }`}</RentalPriceQuota>
             <RentalPriceTotal>R$ {period.totalAmount}</RentalPriceTotal>

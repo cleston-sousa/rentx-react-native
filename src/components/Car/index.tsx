@@ -21,8 +21,8 @@ export function Car({ data, ...rest }: IProps) {
         <Name>{data.name}</Name>
         <About>
           <Rent>
-            <Period>{data.rent.period}</Period>
-            <Price>{numberToCurrencyFormatted(data.rent.price)}</Price>
+            <Period>{data.period}</Period>
+            <Price>{numberToCurrencyFormatted(data.price)}</Price>
           </Rent>
           <Type>
             <MotorIconSvg />

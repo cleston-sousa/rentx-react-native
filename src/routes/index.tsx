@@ -1,15 +1,17 @@
 import React from 'react';
-
 import { NavigationContainer } from '@react-navigation/native';
 
-import { StackRoutes } from './stack.routes';
+import { useAuth } from '../hooks/auth';
 
-import { IProps } from '../../App';
+import { AppTabRoutes } from './app.tab.routes';
+import { AuthRoutes } from './auth.routes';
+
+export interface IProps {
+  onReady?: () => void;
+}
 
 export function Routes({ onReady }: IProps) {
-  return (
-    <NavigationContainer onReady={onReady}>
-      <StackRoutes />
-    </NavigationContainer>
-  );
+  const { user } = useAuth();
+
+  return <NavigationContainer onReady={onReady}>{user ? <AppTabRoutes /> : <AuthRoutes />}</NavigationContainer>;
 }

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { parseISO } from 'date-fns';
 
-import { IRentalPeriod, StackRoutesParamList } from '../../routes/stack.routes';
+import { IRentalPeriod, AppStackRoutesParamList } from '../../routes/app.stack.routes';
 
 import { Calendar, IDateProps, IMarkedDatesType } from '../../components/Calendar';
 
@@ -21,7 +21,7 @@ import { api } from '../../services/api';
 import axios from 'axios';
 import { Loading } from '../../components/Loading';
 
-export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'Scheduling'>;
+export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'Scheduling'>;
 
 export function Scheduling({ route }: ScreenProps) {
   const { car } = route.params;
@@ -128,7 +128,7 @@ export function Scheduling({ route }: ScreenProps) {
       endFormatted: dateFormatted(parseISO(end.dateString)),
       interval: daysList,
       days,
-      totalAmount: days * car.rent.price
+      totalAmount: days * car.price
     });
   }
 

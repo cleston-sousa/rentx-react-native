@@ -43,14 +43,14 @@ export function Splash() {
   });
 
   useEffect(() => {
-    splashAnimation.value = withTiming(50, { duration: 6000 }, () => {
+    splashAnimation.value = withTiming(50, { duration: 1000 }, () => {
       'worklet';
       runOnJS(startApp)();
     });
   }, []);
 
   function startApp() {
-    navigate('Home');
+    navigate('SignIn');
   }
 
   return (

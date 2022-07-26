@@ -10,9 +10,16 @@ import DoneSvg from '../../assets/done.svg';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackRoutesParamList } from '../../routes/stack.routes';
+import { AppStackRoutesParamList } from '../../routes/app.stack.routes';
+import { AuthRoutesParamList } from '../../routes/auth.routes';
 
-export type ScreenProps = NativeStackScreenProps<StackRoutesParamList, 'Confirmation'>;
+export interface IConfirmation {
+  title: string;
+  message: string;
+  nextScreenRoute: keyof AppStackRoutesParamList | keyof AuthRoutesParamList;
+}
+
+export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'Confirmation'>;
 
 export function Confirmation({ route }: ScreenProps) {
   const { width } = useWindowDimensions();
