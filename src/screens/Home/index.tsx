@@ -17,20 +17,24 @@ export function Home() {
   const [cars, setCars] = useState<ICar[]>([]);
   const [loading, setLoading] = useState(false);
 
-  async function fetchCars() {
+  async function fetchCars(isMounted: boolean) {
     try {
       setLoading(true);
       const response = await api.get('/cars');
-      setCars(response.data);
+      isMounted && setCars(response.data);
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      isMounted && setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchCars();
+    let isMounted = true;
+    fetchCars(isMounted);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   function handleCarDetails(car: ICar) {

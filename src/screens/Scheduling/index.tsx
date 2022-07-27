@@ -37,8 +37,8 @@ export function Scheduling({ route }: ScreenProps) {
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
 
-  async function fetchUnavailableDates() {
-    setLoading(true);
+  async function fetchUnavailableDates(isMounted: boolean) {
+    isMounted && setLoading(true);
     let unavailableDatesResponse: string[] = [];
     try {
       const response = await api.get(`/schedules_bycars/${car.id}`);
@@ -57,13 +57,17 @@ export function Scheduling({ route }: ScreenProps) {
         }
       };
     });
-    setMarkedDates(interval);
-    setUnavailableDates(unavailableDatesResponse);
-    setLoading(false);
+    isMounted && setMarkedDates(interval);
+    isMounted && setUnavailableDates(unavailableDatesResponse);
+    isMounted && setLoading(false);
   }
 
   useEffect(() => {
-    fetchUnavailableDates();
+    let isMounted = true;
+    fetchUnavailableDates(isMounted);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   function handleConfirmInfo() {

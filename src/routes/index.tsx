@@ -13,5 +13,5 @@ export interface IProps {
 export function Routes({ onReady }: IProps) {
   const { user } = useAuth();
 
-  return <NavigationContainer onReady={onReady}>{user ? <AppTabRoutes /> : <AuthRoutes />}</NavigationContainer>;
+  return <NavigationContainer onReady={onReady}>{user.id ? <AppTabRoutes /> : <AuthRoutes />}</NavigationContainer>;
 }

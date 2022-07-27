@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from 'styled-components/native';
 
-import { Profiles } from '../screens/Profiles';
+import { Profile } from '../screens/Profile';
 import { MyCars } from '../screens/MyCars';
 import { AppStackRoutes } from './app.stack.routes';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -14,7 +14,7 @@ import PeopleSvg from '../assets/people_tab.svg';
 
 export type AppTabRoutesParamList = {
   HomeContainer: undefined;
-  Profiles: undefined;
+  Profile: undefined;
   MyCars: undefined;
 };
 
@@ -51,8 +51,8 @@ export function AppTabRoutes() {
         }}
       />
       <Screen
-        name="Profiles"
-        component={Profiles}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarIcon: ({ focused, color }) => <PeopleSvg width={24} height={24} fill={color} />
         }}
