@@ -59,11 +59,11 @@ function AuthProvider({ children }: IAuthProvider) {
         const userSelected = await usersCollection.find(data.id);
         await userSelected.destroyPermanently();
       });
-
-      setData({} as IUser);
       delete api.defaults.headers.common['Authorization'];
+      setData({} as IUser);
     } catch (error) {
-      throw new Error(error);
+      console.log('Logout error: ');
+      console.log(error);
     }
   }
 
@@ -102,7 +102,7 @@ function AuthProvider({ children }: IAuthProvider) {
       }
     }
     loadUserData();
-  }, []);
+  });
 
   function updateUserStateAndApi(user: User, token: string) {
     setData({ ...user, token });
