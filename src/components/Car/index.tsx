@@ -1,7 +1,7 @@
 import React from 'react';
 import { RectButtonProps } from 'react-native-gesture-handler';
 
-import { ICar } from '../../dtos/ICar';
+import { Car as CarModel } from '../../database/model/Car';
 
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 import { numberToCurrencyFormatted } from '../../utils/i18n';
@@ -9,7 +9,7 @@ import { numberToCurrencyFormatted } from '../../utils/i18n';
 import { Container, Details, Brand, Name, Rent, Period, Price, About, Type, CarImage } from './styles';
 
 interface IProps extends RectButtonProps {
-  data: ICar;
+  data: CarModel;
 }
 
 export function Car({ data, ...rest }: IProps) {

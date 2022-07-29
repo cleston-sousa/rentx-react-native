@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { useAuth } from '../hooks/auth';
@@ -12,6 +12,14 @@ export interface IProps {
 
 export function Routes({ onReady }: IProps) {
   const { user } = useAuth();
+  const [contentToShow, setContentToShow] = useState(<AuthRoutes />);
 
-  return <NavigationContainer onReady={onReady}>{user.id ? <AppTabRoutes /> : <AuthRoutes />}</NavigationContainer>;
+  useEffect(() => {
+    console.log('routes : user.id : ' + user.id);
+
+    if (user.id) setContentToShow(<AppTabRoutes />);
+    else setContentToShow(<AuthRoutes />);
+  }, [user]);
+
+  return <NavigationContainer onReady={onReady}>{contentToShow}</NavigationContainer>;
 }

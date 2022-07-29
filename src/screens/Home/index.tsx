@@ -2,44 +2,82 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { synchronize } from '@nozbe/watermelondb/sync';
+
+import { database } from '../../database';
+import { api } from '../../services/api';
 
 import Logo from '../../assets/logo.svg';
 
 import { Car } from '../../components/Car';
 import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
 
-import { api } from '../../services/api';
-import { ICar } from '../../dtos/ICar';
 import { LoadAnimation } from '../../components/LoadAnimation';
+import { Car as CarModel } from '../../database/model/Car';
 
 export function Home() {
   const { navigate } = useNavigation();
-  const [cars, setCars] = useState<ICar[]>([]);
+  const [cars, setCars] = useState<CarModel[]>([]);
   const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const netInfo = useNetInfo();
 
-  async function fetchCars(isMounted: boolean) {
+  function handleCarDetails(car: CarModel) {
+    navigate('CarDetails', { car });
+  }
+
+  async function synchronizeCars() {
+    if (loading) return;
+    console.log('home : synchronizeCars : start');
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await api.get('/cars');
-      isMounted && setCars(response.data);
+      const carsCollection = database.get<CarModel>('cars');
+      const cars = await carsCollection.query().fetch();
+      setCars(cars);
     } catch (error) {
+      console.log('home : synchronizeCars : error');
       console.log(error);
-    } finally {
-      isMounted && setLoading(false);
     }
+    console.log('home : synchronizeCars : end');
+    setLoading(false);
+  }
+
+  async function offlineSync() {
+    console.log('home : offlineSync ');
+    if (syncing) return;
+    console.log('home : offlineSync : start');
+    setSyncing(true);
+    await synchronize({
+      database,
+      pullChanges: async ({ lastPulledAt }) => {
+        const { data } = await api.get(`/cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+        const { changes, latestVersion } = data;
+        return { changes, timestamp: latestVersion };
+      },
+      pushChanges: async ({ changes }) => {
+        const user = changes.users;
+        if (user.updated.length > 0) {
+          await api.post('/users/sync', user).catch(console.log);
+        }
+      }
+    });
+    console.log('home : offlineSync : end');
+    synchronizeCars();
+    setSyncing(false);
   }
 
   useEffect(() => {
-    let isMounted = true;
-    fetchCars(isMounted);
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    console.log('home : useEffect : netInfo.isConnected : ' + netInfo.isConnected);
+    if (netInfo.isConnected === true) {
+      offlineSync();
+    }
+  }, [netInfo.isConnected]);
 
-  function handleCarDetails(car: ICar) {
-    navigate('CarDetails', { car });
-  }
+  useEffect(() => {
+    console.log('home : useEffect : onload : synchronizeCars');
+    synchronizeCars();
+  }, []);
 
   return (
     <Container>

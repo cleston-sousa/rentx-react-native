@@ -6,9 +6,8 @@ import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { Confirmation, IConfirmation } from '../screens/Confirmation';
-import { Splash } from '../screens/Splash';
 
-import { ICar } from '../dtos/ICar';
+import { Car as CarModel } from '../database/model/Car';
 
 export interface ISignUpSecondStep {
   name: string;
@@ -27,12 +26,11 @@ export interface IRentalPeriod {
 }
 
 export type AppStackRoutesParamList = {
-  Splash: undefined;
   Home: undefined;
-  CarDetails: { car: ICar };
-  Scheduling: { car: ICar };
+  CarDetails: { car: CarModel };
+  Scheduling: { car: CarModel };
   SchedulingDetails: {
-    car: ICar;
+    car: CarModel;
     period: IRentalPeriod;
   };
   Confirmation: { data: IConfirmation };
@@ -48,7 +46,6 @@ export function AppStackRoutes() {
         headerShown: false
       }}
     >
-      <Screen name="Splash" component={Splash} />
       <Screen name="Home" component={Home} />
       <Screen name="CarDetails" component={CarDetails} />
       <Screen name="Scheduling" component={Scheduling} />
