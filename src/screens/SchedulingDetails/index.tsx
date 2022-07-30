@@ -48,8 +48,6 @@ import { ICar } from '../../dtos/ICar';
 
 export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'SchedulingDetails'>;
 
-const userId = 1;
-
 export function SchedulingDetails({ route }: ScreenProps) {
   const netInfo = useNetInfo();
   const [carDetails, setCarDetails] = useState<ICar>({} as ICar);
@@ -73,39 +71,15 @@ export function SchedulingDetails({ route }: ScreenProps) {
 
   async function handleConfirmRental() {
     setButtonEnabled(false);
-    let unavailableDatesResponse: string[] = [];
-    let notFound = false;
-    try {
-      const response = await api.get(`/schedules_bycars/${car.id}`);
-      unavailableDatesResponse = response.data['unavailable_dates'];
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response && error.response.status == 404) {
-        notFound = true;
-      } else {
-        Alert.alert('Veículo sujeito a análise de disponibilidade.');
-      }
-    }
-
-    const unavailableDates = [...unavailableDatesResponse, ...period.interval];
-
-    await api.post(`/schedules_byuser`, {
-      user_id: userId,
-      startDate: period.startFormatted,
-      endDate: period.endFormatted,
-      car
-    });
-
-    const reservedDates = {
-      id: car.id,
-      unavailable_dates: unavailableDates
-    };
 
     try {
-      if (notFound) {
-        await api.post(`/schedules_bycars`, reservedDates);
-      } else {
-        await api.put(`/schedules_bycars/${car.id}`, reservedDates);
-      }
+      await api.post(`/rentals`, {
+        start_date: new Date(period.start),
+        end_date: new Date(period.end),
+        car_id: car.id,
+        total: carDetails.price * period.days
+      });
+
       reset({
         index: 0,
         routes: [
@@ -114,14 +88,21 @@ export function SchedulingDetails({ route }: ScreenProps) {
             params: {
               data: {
                 title: 'Carro alugado!',
-                message: 'Agora você só precisa ir \naté a concessionária da RENTX \npegar o seu automóvel.',
-                nextScreenRoute: 'HomeContainer'
+                message: 'Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel.',
+                nextScreenRoute: 'Home'
               }
             }
           }
         ]
       });
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log('schedulingdetails : handleConfirmRental : AxiosError ');
+        console.log(error.message);
+      } else {
+        console.log('schedulingdetails : handleConfirmRental : error');
+        console.log(error);
+      }
       Alert.alert('Não foi possível realizar o agendamento, tente mais tarde novamente.');
     }
     setButtonEnabled(true);
@@ -130,6 +111,7 @@ export function SchedulingDetails({ route }: ScreenProps) {
   function handleGoBack() {
     goBack();
   }
+
   return (
     <Container>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
