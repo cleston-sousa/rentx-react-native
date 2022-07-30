@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Yup from 'yup';
@@ -38,6 +39,7 @@ const schema = Yup.object().shape({
 });
 
 export function Profile() {
+  const netInfo = useNetInfo();
   const theme = useTheme();
   const { goBack } = useNavigation();
   const [option, setOption] = useState<'data' | 'password'>('data');
@@ -89,6 +91,10 @@ export function Profile() {
   }
 
   function handleOptionChange(type: 'data' | 'password') {
+    if (netInfo.isConnected !== true && type === 'password') {
+      Alert.alert('Ops', 'Para trocar a senha você deve estar conectado a internet.');
+      return;
+    }
     setOption(type);
   }
 

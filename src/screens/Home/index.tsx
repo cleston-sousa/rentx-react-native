@@ -48,6 +48,7 @@ export function Home() {
     if (syncing) return;
     console.log('home : offlineSync : start');
     setSyncing(true);
+
     await synchronize({
       database,
       pullChanges: async ({ lastPulledAt }) => {
@@ -71,13 +72,11 @@ export function Home() {
     console.log('home : useEffect : netInfo.isConnected : ' + netInfo.isConnected);
     if (netInfo.isConnected === true) {
       offlineSync();
+    } else if (netInfo.isConnected === false) {
+      console.log('home : useEffect : netInfo.isConnected : synchronizeCars');
+      synchronizeCars();
     }
   }, [netInfo.isConnected]);
-
-  useEffect(() => {
-    console.log('home : useEffect : onload : synchronizeCars');
-    synchronizeCars();
-  }, []);
 
   return (
     <Container>

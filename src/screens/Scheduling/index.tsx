@@ -4,6 +4,7 @@ import { useTheme } from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { parseISO } from 'date-fns';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import { IRentalPeriod, AppStackRoutesParamList } from '../../routes/app.stack.routes';
 
@@ -24,6 +25,7 @@ import { Loading } from '../../components/Loading';
 export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'Scheduling'>;
 
 export function Scheduling({ route }: ScreenProps) {
+  const netInfo = useNetInfo();
   const { car } = route.params;
   const [lastDateSelected, setLastDateSelected] = useState<IDateProps>({} as IDateProps);
   const [markedDates, setMarkedDates] = useState<IMarkedDatesType>({} as IMarkedDatesType);
@@ -172,7 +174,11 @@ export function Scheduling({ route }: ScreenProps) {
       )}
 
       <Footer>
-        <Button title="Confirmar" onPress={handleConfirmInfo} enabled={!!rentalPeriod.startFormatted} />
+        <Button
+          title="Confirmar"
+          onPress={handleConfirmInfo}
+          enabled={!!rentalPeriod.startFormatted && netInfo.isConnected === true}
+        />
       </Footer>
     </Container>
   );

@@ -7,7 +7,6 @@ import { Container, ImageIndexes, CarImageWrapper, CarImage } from './styles';
 interface IProps {
   imageUrl: {
     id: string;
-    car_id: string;
     photo: string;
   }[];
 }
