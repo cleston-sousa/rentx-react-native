@@ -1,17 +1,22 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Alert, StatusBar } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'styled-components/native';
+import { FlatList } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { AntDesign } from '@expo/vector-icons';
 
 import { BackButton } from '../../components/BackButton';
 import { LoadAnimation } from '../../components/LoadAnimation';
+import { Car } from '../../components/Car';
 
-import { ICar } from '../../dtos/ICar';
+import { Car as CarModel } from '../../database/model/Car';
 
 import { api } from '../../services/api';
+
+import { format, parseISO } from 'date-fns';
 
 import {
   Appointments,
@@ -28,18 +33,13 @@ import {
   Subtitle,
   Title
 } from './styles';
-import { FlatList } from 'react-native-gesture-handler';
-import { Car } from '../../components/Car';
-import { RFValue } from 'react-native-responsive-fontsize';
-
-const userId = 1;
 
 interface ICarResponse {
   id: number;
   user_id: number;
-  startDate: string;
-  endDate: string;
-  car: ICar;
+  start_date: string;
+  end_date: string;
+  car: CarModel;
 }
 
 export function MyCars() {
@@ -47,17 +47,27 @@ export function MyCars() {
   const [cars, setCars] = useState<ICarResponse[]>([]);
   const { goBack } = useNavigation();
   const theme = useTheme();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     async function fetchCars() {
       setLoading(true);
 
       try {
-        const response = await api.get(`/schedules_byuser?user_id=${userId}`);
+        const response = await api.get(`/rentals`);
+
         setCars(response.data);
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response && error.response.status == 404) {
-          Alert.alert('Nenhum veiculo.');
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.status == 404) {
+            Alert.alert('Nenhum veiculo.');
+          } else {
+            console.log('mycars : useEffect : onload : AxiosError ');
+            console.log(error.message);
+          }
+        } else {
+          console.log('mycars : useEffect : onload : error');
+          console.log(error);
         }
       }
 
@@ -65,7 +75,7 @@ export function MyCars() {
     }
 
     fetchCars();
-  }, []);
+  }, [isFocused]);
 
   function handleGoBack() {
     goBack();
@@ -99,7 +109,9 @@ export function MyCars() {
                 <CarFooter>
                   <CarFooterTitle>Período</CarFooterTitle>
                   <CarFooterPeriod>
-                    <CarFooterDate>{item.startDate}</CarFooterDate>
+                    <CarFooterDate>
+                      {format(parseISO(item.start_date), 'dd/MM/yyyy')}- {item.start_date}
+                    </CarFooterDate>
 
                     <AntDesign
                       name="arrowright"
@@ -108,7 +120,7 @@ export function MyCars() {
                       style={{ marginHorizontal: RFValue(10) }}
                     />
 
-                    <CarFooterDate>{item.endDate}</CarFooterDate>
+                    <CarFooterDate>{format(parseISO(item.end_date), 'dd/MM/yyyy')}</CarFooterDate>
                   </CarFooterPeriod>
                 </CarFooter>
               </CarWrapper>
