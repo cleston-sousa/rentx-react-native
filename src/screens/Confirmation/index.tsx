@@ -25,10 +25,13 @@ export function Confirmation({ route }: ScreenProps) {
   const { width } = useWindowDimensions();
   const { title, message, nextScreenRoute } = route.params.data;
 
-  const { navigate } = useNavigation();
+  const { reset } = useNavigation();
 
   function handleOk() {
-    navigate(nextScreenRoute);
+    reset({
+      index: 0,
+      routes: [{ name: nextScreenRoute }]
+    });
   }
 
   return (

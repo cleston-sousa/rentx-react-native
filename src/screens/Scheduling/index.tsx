@@ -36,10 +36,7 @@ export function Scheduling({ route }: ScreenProps) {
       Alert.alert('Selecione um intervalo para alugar');
       return;
     }
-    if (unavailableSelected) {
-      Alert.alert('Existem datas com indisponibilidade do veículo, por favor selecione outro período');
-      return;
-    }
+
     navigate('SchedulingDetails', {
       car,
       period: rentalPeriod
