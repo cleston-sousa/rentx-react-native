@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, StatusBar } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,9 +18,6 @@ import { Container, Content, DateInfo, DateTitle, DateValue, Footer, Header, Ren
 import ArrowSvg from '../../assets/arrow.svg';
 import { getIntervalFormatted } from '../../utils/getIntervalFormatted';
 import { dateFormatted } from '../../utils/i18n';
-import { api } from '../../services/api';
-import axios from 'axios';
-import { Loading } from '../../components/Loading';
 
 export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'Scheduling'>;
 
@@ -31,46 +28,8 @@ export function Scheduling({ route }: ScreenProps) {
   const [markedDates, setMarkedDates] = useState<IMarkedDatesType>({} as IMarkedDatesType);
   const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>({} as IRentalPeriod);
 
-  const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
-  const [unavailableSelected, setUnavailableSelected] = useState(false);
-
-  const [loading, setLoading] = useState(false);
-
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
-
-  async function fetchUnavailableDates(isMounted: boolean) {
-    isMounted && setLoading(true);
-    let unavailableDatesResponse: string[] = [];
-    try {
-      const response = await api.get(`/schedules_bycars/${car.id}`);
-      unavailableDatesResponse = response.data['unavailable_dates'];
-    } catch (error) {
-      if (!(axios.isAxiosError(error) && error.response && error.response.status == 404)) {
-        Alert.alert('Veículo sujeito a análise de disponibilidade.');
-      }
-    }
-    let interval: IMarkedDatesType = {};
-    unavailableDatesResponse.forEach((item) => {
-      interval = {
-        ...interval,
-        [item]: {
-          disabled: true
-        }
-      };
-    });
-    isMounted && setMarkedDates(interval);
-    isMounted && setUnavailableDates(unavailableDatesResponse);
-    isMounted && setLoading(false);
-  }
-
-  useEffect(() => {
-    let isMounted = true;
-    fetchUnavailableDates(isMounted);
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   function handleConfirmInfo() {
     if (!rentalPeriod.start || !rentalPeriod.end) {
@@ -101,30 +60,10 @@ export function Scheduling({ route }: ScreenProps) {
       start = toggle;
     }
 
-    let interval = getIntervalFormatted(start, end);
-
+    const interval = getIntervalFormatted(start, end);
     const daysList = Object.keys(interval);
     const days = daysList.length;
-    const unavailable = [...unavailableDates];
 
-    let hasUnavailable = false;
-    daysList.forEach((item) => {
-      if (unavailable.includes(item)) {
-        hasUnavailable = true;
-        unavailable.splice(unavailable.indexOf(item), 1);
-        interval[item].color = theme.colors.title;
-        interval[item].textColor = theme.colors.shape;
-        interval[item].disabled = true;
-      }
-    });
-    unavailable.forEach((item) => {
-      interval = {
-        ...interval,
-        [item]: { disabled: true }
-      };
-    });
-
-    setUnavailableSelected(hasUnavailable);
     setLastDateSelected(date);
     setMarkedDates(interval);
     setRentalPeriod({
@@ -166,12 +105,9 @@ export function Scheduling({ route }: ScreenProps) {
         </RentalPeriod>
       </Header>
 
-      {loading && <Loading />}
-      {!loading && (
-        <Content>
-          <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
-        </Content>
-      )}
+      <Content>
+        <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
+      </Content>
 
       <Footer>
         <Button

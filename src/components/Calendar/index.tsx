@@ -3,9 +3,10 @@ import { useTheme } from 'styled-components/native';
 import { Calendar as CustomCalendar, DateData, LocaleConfig } from 'react-native-calendars';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { Feather } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { format } from 'date-fns';
 
 import { CalendarLocaleConfig } from './LocaleConfig';
-import { RFValue } from 'react-native-responsive-fontsize';
 
 LocaleConfig.locales['pt-br'] = CalendarLocaleConfig['pt-br'];
 LocaleConfig.defaultLocale = 'pt-br';
@@ -46,7 +47,7 @@ export function Calendar({ markedDates, onDayPress }: IProps) {
         arrowStyle: { marginHorizontal: -15 }
       }}
       firstDay={1}
-      minDate={String(new Date())}
+      minDate={format(new Date(), 'yyyy-MM-dd')}
       markingType="period"
       markedDates={markedDates}
       onDayPress={onDayPress}

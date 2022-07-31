@@ -5,7 +5,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'styled-components/native';
 import { FlatList } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, parse } from 'date-fns';
 import { AntDesign } from '@expo/vector-icons';
 
 import { BackButton } from '../../components/BackButton';
@@ -15,6 +15,7 @@ import { Car } from '../../components/Car';
 import { ICar } from '../../dtos/ICar';
 
 import { api } from '../../services/api';
+import { dateFormatted } from '../../utils/i18n';
 
 import {
   Appointments,
@@ -53,7 +54,6 @@ export function MyCars() {
 
       try {
         const response = await api.get(`/rentals`);
-
         setCars(response.data);
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -107,9 +107,7 @@ export function MyCars() {
                 <CarFooter>
                   <CarFooterTitle>Período</CarFooterTitle>
                   <CarFooterPeriod>
-                    <CarFooterDate>
-                      {format(parseISO(item.start_date), 'dd/MM/yyyy')}- {item.start_date}
-                    </CarFooterDate>
+                    <CarFooterDate>{format(parseISO(item.start_date.substring(0, 10)), 'dd/MM/yyyy')}</CarFooterDate>
 
                     <AntDesign
                       name="arrowright"
@@ -117,8 +115,7 @@ export function MyCars() {
                       color={theme.colors.title}
                       style={{ marginHorizontal: RFValue(10) }}
                     />
-
-                    <CarFooterDate>{format(parseISO(item.end_date), 'dd/MM/yyyy')}</CarFooterDate>
+                    <CarFooterDate>{format(parseISO(item.end_date.substring(0, 10)), 'dd/MM/yyyy')}</CarFooterDate>
                   </CarFooterPeriod>
                 </CarFooter>
               </CarWrapper>
