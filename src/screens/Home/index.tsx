@@ -15,15 +15,16 @@ import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
 
 import { LoadAnimation } from '../../components/LoadAnimation';
 import { Car as CarModel } from '../../database/model/Car';
+import { ICar } from '../../dtos/ICar';
 
 export function Home() {
   const { navigate } = useNavigation();
-  const [cars, setCars] = useState<CarModel[]>([]);
+  const [cars, setCars] = useState<ICar[]>([]);
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const netInfo = useNetInfo();
 
-  function handleCarDetails(car: CarModel) {
+  function handleCarDetails(car: ICar) {
     navigate('CarDetails', { car });
   }
 
@@ -33,7 +34,10 @@ export function Home() {
     setLoading(true);
     try {
       const carsCollection = database.get<CarModel>('cars');
-      const cars = await carsCollection.query().fetch();
+      const carsModel = await carsCollection.query().fetch();
+      const cars = carsModel.map(({ id, name, brand, about, fuel_type, period, price, thumbnail }) => {
+        return { id, name, brand, about, fuel_type, period, price, thumbnail } as ICar;
+      });
       setCars(cars);
     } catch (error) {
       console.log('home : synchronizeCars : error');

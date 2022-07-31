@@ -6,8 +6,7 @@ import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { Confirmation, IConfirmation } from '../screens/Confirmation';
-
-import { Car as CarModel } from '../database/model/Car';
+import { ICar } from '../dtos/ICar';
 
 export interface ISignUpSecondStep {
   name: string;
@@ -27,10 +26,10 @@ export interface IRentalPeriod {
 
 export type AppStackRoutesParamList = {
   Home: undefined;
-  CarDetails: { car: CarModel };
-  Scheduling: { car: CarModel };
+  CarDetails: { car: ICar };
+  Scheduling: { car: ICar };
   SchedulingDetails: {
-    car: CarModel;
+    car: ICar;
     period: IRentalPeriod;
   };
   Confirmation: { data: IConfirmation };

@@ -1,22 +1,20 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Alert, StatusBar } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTheme } from 'styled-components/native';
 import { FlatList } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-
+import { format, parseISO } from 'date-fns';
 import { AntDesign } from '@expo/vector-icons';
 
 import { BackButton } from '../../components/BackButton';
 import { LoadAnimation } from '../../components/LoadAnimation';
 import { Car } from '../../components/Car';
 
-import { Car as CarModel } from '../../database/model/Car';
+import { ICar } from '../../dtos/ICar';
 
 import { api } from '../../services/api';
-
-import { format, parseISO } from 'date-fns';
 
 import {
   Appointments,
@@ -39,7 +37,7 @@ interface ICarResponse {
   user_id: number;
   start_date: string;
   end_date: string;
-  car: CarModel;
+  car: ICar;
 }
 
 export function MyCars() {

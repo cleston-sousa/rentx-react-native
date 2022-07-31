@@ -50,8 +50,8 @@ export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'Sched
 
 export function SchedulingDetails({ route }: ScreenProps) {
   const netInfo = useNetInfo();
-  const [carDetails, setCarDetails] = useState<ICar>({} as ICar);
   const [buttonEnabled, setButtonEnabled] = useState(true);
+  const [carDetails, setCarDetails] = useState<ICar>({} as ICar);
   const { car, period } = route.params;
 
   const theme = useTheme();

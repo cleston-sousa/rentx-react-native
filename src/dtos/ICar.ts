@@ -1,12 +1,15 @@
 export interface ICar {
+  // model atts
   id: string;
-  brand: string;
   name: string;
+  brand: string;
   about: string;
+  fuel_type: string;
   period: string;
   price: number;
-  fuel_type: string;
   thumbnail: string;
+
+  // old api atts
   created_at: string;
   updated_at: string;
   accessories: {

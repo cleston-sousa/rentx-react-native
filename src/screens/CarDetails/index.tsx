@@ -37,9 +37,9 @@ import { api } from '../../services/api';
 export type ScreenProps = NativeStackScreenProps<AppStackRoutesParamList, 'CarDetails'>;
 
 export function CarDetails({ route }: ScreenProps) {
-  const [carDetails, setCarDetails] = useState<ICar>({} as ICar);
   const { navigate, goBack } = useNavigation();
   const netInfo = useNetInfo();
+  const [carDetails, setCarDetails] = useState<ICar>({} as ICar);
   const { car } = route.params;
 
   async function fetchCarDetails() {
@@ -62,7 +62,6 @@ export function CarDetails({ route }: ScreenProps) {
     goBack();
   }
 
-  //useNetInfo
   return (
     <Container>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
